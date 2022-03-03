@@ -12,7 +12,7 @@
 >
 </head>
 <body>
-    <div id="app"></div>
+    <div id="root"></div>
     <script src="{{ asset('js/index.js') }}" defer></script>
 </body>
 </html>

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
-import api from '../config/api.js';
+import api from './config/api.js';
 
 function App() {
     const [value, setValue] = useState({
@@ -64,7 +63,3 @@ function App() {
 }
 
 export default App;
-
-if (document.getElementById('app')) {
-    ReactDOM.render(<App />, document.getElementById('app'));
-}
