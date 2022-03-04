@@ -24,9 +24,11 @@ class UserController extends Controller
 
     	$user->save();
 
+        $token = $user->createToken("auth_token")->plainTextToken;
     	return response()->json([
     		"status" => 1,
-    		"msg" => "User's register success!"
+    		"msg" => "User's register success and logged!",
+            "access_token" => $token
     	]);
     }
 

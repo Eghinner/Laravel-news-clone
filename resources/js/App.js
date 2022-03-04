@@ -1,65 +1,51 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { Routes, Route, Link } from "react-router-dom";
 import axios from 'axios';
 import api from './config/api.js';
+import Register from './pages/Register.js'
+import Login from './pages/Login.js'
 
-function App() {
-    const [value, setValue] = useState({
-        email: '',
-        password: ''
-    })
-
-    const handleChange = event => {
-        event.persist();
-        setValue(prevState => ({...prevState, [event.target.name]: event.target.value}))
-    }
-    const handleSubmit = event => {
-        event.preventDefault();
-
-        api().get('/sanctum/csrf-cookie').then(() => {
-            api().post('/login', value).then(res => {
-                if (res.data.error) {
-                    console.log(res.data.error);
-                } else {
-                    console.log('success')
-                }
-            });
-        });
-    }
-
-    return (
-        <React.Fragment>
-        <div className="background">
-                <div className="shape"></div>
-                <div className="shape"></div>
-        </div>
-        <form>
-            <h3>Login Here</h3>
-            <label htmlFor="email">Email</label>
-            <input
-                type="text"
-                name="email"
-                placeholder="Email"
-                id="email"
-                //value={name}
-                onChange={handleChange}
-            />
-            <label htmlFor="password">Password</label>
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                id="password"
-                //value={password}
-                onChange={handleChange}
-            />
-            <button onClick={handleSubmit}>Log In</button>
-            <div className="social">
-              <div className="go"><i className="fab fa-google"></i>  Google</div>
-              <div className="fb"><i className="fab fa-facebook"></i>  Facebook</div>
-        </div>
-        </form>
-        </React.Fragment>
-    );
+export default function App() {
+  return (
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="about" element={<About />} />
+      </Routes>
+    </div>
+  );
 }
 
-export default App;
+function Home() {
+  return (
+    <>
+      <main>
+        <h2>Welcome to the homepage!</h2>
+        <p>You can do this, I believe in you.</p>
+      </main>
+      <nav>
+        <Link to="/about">About</Link>
+        <Link to="/register">About</Link>
+      </nav>
+    </>
+  );
+}
+
+function About() {
+  return (
+    <>
+      <main>
+        <h2>Who are we?</h2>
+        <p>
+          That feels like an existential question, don't you
+          think?
+        </p>
+      </main>
+      <nav>
+        <Link to="/">Home</Link>
+      </nav>
+    </>
+  );
+}
