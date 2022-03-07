@@ -1,38 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
+import { Background, Shape, Form, Suggest } from './Register.styled'
 import axios from 'axios';
-import api from '../config/api.js';
 
 function Register() {
+    const [token, setToken] = useState(null)
+
     const [value, setValue] = useState({
         email: '',
         password: ''
     })
 
+    let navigate = useNavigate();
+
     const handleChange = event => {
         event.persist();
-        setValue(prevState => ({...prevState, [event.target.name]: event.target.value}))
+        setValue(prevState => ({ ...prevState, [event.target.name]: event.target.value }))
     }
     const handleSubmit = event => {
         event.preventDefault();
-
-        api().get('/sanctum/csrf-cookie').then(() => {
-            api().post('/login', value).then(res => {
-                if (res.data.error) {
-                    console.log(res.data.error);
-                } else {
-                    console.log('success')
-                }
+        axios.post('http://127.0.0.1:8000/api/register', value)
+            .then(function(response) {
+                setToken(response.data.access_token)
+                navigate("/")
+            })
+            .catch(function(error) {
+                console.log(error);
             });
-        });
     }
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
+        }
+    };
+    const getToken = () => {
+        axios.get(
+                'http://127.0.0.1:8000/api/user-profile',
+                config
+            )
+            .then(function(response) {
+                console.log(response.data);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
+
+    // useEffect(() => {
+    //     console.log(token)
+    // }, [token])
 
     return (
         <React.Fragment>
-        <div className="background">
-                <div className="shape"></div>
-                <div className="shape"></div>
-        </div>
-        <form>
+        <Background>
+                <Shape></Shape>
+                <Shape></Shape>
+        </Background>
+        <Form>
             <h3>Register Here</h3>
             <label htmlFor="name">Username</label>
             <input
@@ -67,7 +92,10 @@ function Register() {
                 onChange={handleChange}
             />
             <button onClick={handleSubmit}>Register</button>
-        </form>
+        <Suggest>
+            <div>Already have an account?<Link to="/login">Log in</Link></div>
+        </Suggest>
+        </Form>
         </React.Fragment>
     );
 }

@@ -17,6 +17,8 @@ Route::group( ['middleware' => ['auth:sanctum']], function() {
 	Route::get('logout', [UserController::class, 'logOut']);
 
 	Route::post('create-post', [PostController::class, 'store']);
+	Route::put('post/{id}', [PostController::class, 'update']);
+	Route::delete('post/{id}', [PostController::class, 'destroy']);
 } );
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

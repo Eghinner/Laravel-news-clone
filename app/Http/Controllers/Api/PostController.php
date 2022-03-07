@@ -64,7 +64,36 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'body' => 'required',
+        ]);
+
+        $post = Post::where('id', $id)->first();
+        if ( isset($post->id) ) {
+            if ($post->user_id === auth()->user()->id) {
+                $post->name = $request->name;
+                $post->body = $request->body;
+                $post->save();
+
+                return response()->json([
+                    "status" => 1,
+                    "msg" => "Post update success!",
+                    "data" => $post
+                ]);
+            } else {
+                return response()->json([
+                    "status" => 0,
+                    "msg" => "User can't edit this post!"
+                ]);
+            }
+        } else {
+            return response()->json([
+                "status" => 0,
+                "msg" => "Post not exist!"
+            ]);
+        }
+
     }
 
     /**
@@ -75,6 +104,11 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Post::where('id', $id)->delete();
+
+        return response()->json([
+            "status" => 1,
+            "msg" => "Post delete success!"
+        ]);
     }
 }
