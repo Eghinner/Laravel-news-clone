@@ -1,6 +1,12 @@
 import styled from '@emotion/styled'
 
-export const Background = styled.div `
+export const Background = styled.div`
+    height: 100vh;
+    width: 100%;
+    background-color: #080710;
+    overflow: hidden;
+`
+export const Content = styled.div `
 	width: 430px;
 	height: 520px;
 	position: absolute;

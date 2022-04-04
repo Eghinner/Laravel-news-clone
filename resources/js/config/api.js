@@ -1,21 +1,26 @@
 import axios from 'axios'
 // import {logOut} from '@/util/auth'
 
-export default function api() {
+export default const api = () => {
     const api = axios.create({
-        baseURL: 'http://localhost:8000',
-        withCredentials: true
-    })
-
-    api.interceptors.response.use(response => response, error => {
-        if (error.response.status === 401) {
-            // logOut()
-
-            return Promise.reject()
+        baseURL: process.env.APP_URL,
+        // timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         }
-
-        return Promise.reject(error)
+        // withCredentials: true,
     })
+
+    // api.interceptors.response.use(response => response, error => {
+    //     if (error.response.status === 401) {
+    //         // logOut()
+
+    //         return Promise.reject()
+    //     }
+
+    //     return Promise.reject(error)
+    // })
 
     return api
 }
